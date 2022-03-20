@@ -27,9 +27,9 @@ const typeDefs = gql`
   }
   type Round {
     _id: ID
-    courseName: String
     createAt: String
     username: String
+    course: [Course]
     scores: [Score]
     totalScore: Int
   }
@@ -53,8 +53,9 @@ const typeDefs = gql`
     addFriend(friendId: ID!): User
     addCourse(courseId: ID!): User
     removeCourse(courseId: ID!): User
-    addRound(courseName: String!): Round
+    addRound(course: ID!): Round
     deleteRound(roundId: ID!): Round
+    deleteCourses: Course
     createCourse(
       courseName: String!
       location: String!

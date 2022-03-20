@@ -1,5 +1,7 @@
 const { Schema, model } = require('mongoose');
 const dateFormat = require('../utils/dateFormat');
+const Course = require('./Course');
+
 
 const scoreSchema = new Schema({
     holeNumber: {
@@ -14,10 +16,6 @@ const scoreSchema = new Schema({
 
 const roundSchema = new Schema(
     {
-        courseName: {
-            type: String,
-            required: true,
-        },
         createAt: {
             type: Date,
             default: Date.now,
@@ -27,7 +25,12 @@ const roundSchema = new Schema(
             type: String,
             required: true
         },
-        scores: [scoreSchema]
+        scores: [scoreSchema],
+        course: [
+            {
+            type: Schema.Types.ObjectId,
+            ref: Course
+        }]
     },
     {
         toJSON: {

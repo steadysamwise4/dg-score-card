@@ -45,7 +45,7 @@ const resolvers = {
     },
     round: async (parent, { _id }) => {
       const params = _id ? { _id } : {};
-      return Round.findById(params);
+      return Round.findById(params).populate('course');
     },
   },
   Mutation: {
@@ -114,15 +114,19 @@ const resolvers = {
         const round = await Round.create({
           ...args,
           username: context.user.username,
-        });
-
+        })
+        // .populate('course');
+        
         await User.findOneAndUpdate(
           { _id: context.user._id },
           { $addToSet: { rounds: round._id } },
           { new: true }
         );
 
-        return round;
+        
+        
+
+        return round.populate('course');
       }
 
       throw new AuthenticationError('You need to be logged in!');
@@ -143,6 +147,10 @@ const resolvers = {
         }
         throw new AuthenticationError('You need to be logged in!');
 
+    },
+
+    deleteCourses: async () => {
+      return Course.remove();
     },
 
     createCourse: async (parent, args, context) => {

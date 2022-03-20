@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faMinus, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { useMutation, useQuery } from "@apollo/client";
@@ -25,16 +25,42 @@ function ScorePage() {
     (course) => course?.courseName === round.courseName
   );
 
-  
+  console.log(round);
   console.log(matchingCourse);
 
   const [totalScore, setTotalScore] = useState(0);
   const [holeNumber, setHoleNumber] = useState(1);
-  const [holePar, setHolePar] = useState(matchingCourse?.holes[0].par || 3);
-  const [holeLength, setHoleLength] = useState(matchingCourse?.holes[0].length || '-');
+  const [index, setIndex] = useState(1);
+  const [holePar, setHolePar] = useState(null);
+  
+  console.log(holePar);
+
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     console.log(matchingCourse)
+  //   }, 2000)
+  //   .then(() => {
+  //     setHolePar(matchingCourse.holes[index].par);
+  //   });
+  // // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, []);
+
+  const [holeLength, setHoleLength] = useState('');
+  
+  console.log(holeLength);
+ 
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     console.log(matchingCourse)
+  //   }, 2000)
+  //   .then(() => {
+  //     setHoleLength(matchingCourse.holes[index].length);
+  //   });
+  // // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, []);
+
   const [stroke, setStroke] = useState(3);
   const [show, setShow] = useState(false);
-  const [index, setIndex] = useState(1);
   
 
   const toggleModal = () => {
