@@ -49,18 +49,30 @@ export const QUERY_COURSE = gql`
 `;
 
 export const QUERY_ROUND = gql`
-  query round($roundId: ID!) {
-    round(_id: $roundId) {
+query round($id: ID!) {
+  round(_id: $id) {
+    _id
+    createAt
+    username
+    course {
       _id
-      totalScore
       courseName
-      username
-      scores {
+      location
+      holes {
         holeNumber
-        stroke
+        par
+        length
       }
+      holeCount
+      parTotal
     }
+    scores {
+      holeNumber
+      stroke
+    }
+    totalScore
   }
+}
 `;
 
 export const QUERY_USER = gql`
@@ -94,30 +106,47 @@ export const QUERY_USER = gql`
 `;
 
 export const QUERY_ME = gql`
-  {
-    me {
+query me {
+  me {
+    _id
+    username
+    email
+    courses {
       _id
+      courseName
+      location
+      holes {
+        holeNumber
+        par
+        length
+      }
+      holeCount
+      parTotal
+    }
+    rounds {
+      _id
+      createAt
       username
-      email
-      coursesPlayed
-      courses {
-        _id
+      course {
         courseName
         location
+        holes {
+          holeNumber
+          par
+          length
+        }
+        holeCount
         parTotal
       }
-      rounds {
-        _id
-        courseName
-        createAt
-        totalScore
-        scores {
-          holeNumber
-          stroke
-        }
+      scores {
+        holeNumber
+        stroke
       }
+      totalScore
     }
+    coursesPlayed
   }
+}
 `;
 
 export const QUERY_ME_COURSES = gql`

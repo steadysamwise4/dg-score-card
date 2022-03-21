@@ -17,6 +17,7 @@ function Profile() {
   const { data: allCorseData } = useQuery(QUERY_ALL_COURSES);
   const user = data?.me || {};
   const allCourses = allCorseData?.courses || [];
+  console.log(user);
 
   const findScore = (strokes, par) => {
     let score = strokes - par;

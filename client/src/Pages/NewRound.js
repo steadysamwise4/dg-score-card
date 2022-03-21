@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { QUERY_COURSE } from "../utils/queries";
 import { useMutation, useQuery } from "@apollo/client";
 import { ADD_ROUND } from "../utils/mutations";
@@ -8,21 +8,30 @@ const NewRound = () => {
   const navigate = useNavigate();
   const { courseId: courseParam } = useParams();
 
+  const [holePar, setHolePar] = useState(null);
+  const [holeLength, setHoleLength] = useState('');
+
+
   const { loading, data } = useQuery(QUERY_COURSE, {
     variables: { _id: courseParam },
   });
   const course = data?.course || {};
-  const courseName = course.courseName;
+  const courseId = course._id;
 
   const [addRound, { error }] = useMutation(ADD_ROUND);
 
   const handleStartRound = async () => {
     try {
       const round = await addRound({
-        variables: { courseName },
+        variables: { course: courseId },
       });
       const roundId = round.data.addRound._id;
-      navigate(`/score/${roundId}`);
+      const courseToPlay = round.data.addRound.course;
+      setHolePar(courseToPlay[0].holes[0].par);
+      setHoleLength(courseToPlay[0].holes[0].length);
+        
+        navigate(`/score/${roundId}`, { state: {holePar: holePar, holeLength: holeLength} });
+
     } catch (e) {
       console.error(e);
     }
@@ -52,7 +61,7 @@ const NewRound = () => {
         <h5>Play a round at {course.courseName} ?</h5>
 
         <button onClick={handleStartRound} className='button-go'>
-          Start Round
+          Let's Go!
         </button>
         {error && <div>Go back and login or signup</div>}
 

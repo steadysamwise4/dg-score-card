@@ -47,6 +47,7 @@ const typeDefs = gql`
     rounds: [Round]
     round(_id: ID!): Round
   }
+
   type Mutation {
     login(email: String!, password: String!): Auth
     addUser(username: String!, email: String!, password: String!): Auth

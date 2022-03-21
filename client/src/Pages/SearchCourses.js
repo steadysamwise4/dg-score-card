@@ -74,7 +74,6 @@ const SearchCourses = () => {
               (course) => course.courseName === data[0].name.trim()
             );
           
-              console.log(matchingCourse)
             if (!matchingCourse) { 
 
             try {
@@ -86,18 +85,25 @@ const SearchCourses = () => {
                     holeCount: parseInt(holes),
                   },
                 });
-                  console.log(newCourse.data.createCourse._id);
+                console.log(holeData);
                 for (let i=0;i<holeData.length;i++) {
-                    addHole({
+                    const updatedCourse = await addHole({
                         variables: {
                           courseId: newCourse.data.createCourse._id,
                           holeNumber: holeData[i].holeNumber,
                           par: holeData[i].par,
-                          length: holeData[i].length
-                        },
+                          length: holeData[i].length,
+                        }
                       });
-                }
-          
+                      if (updatedCourse) {
+                        continue;
+                      } else {
+                        setTimeout(() => {
+                          console.log('...loading')
+                        }, 500)
+                      }
+                    }
+
                 navigate(`/newround/${newCourse.data.createCourse._id}`);
               } catch (e) {
                 console.error(e);
@@ -152,6 +158,8 @@ const SearchCourses = () => {
           </MDBListGroup>
           )}
         </MDBCard>
+        {error && <div>Something went wrong...</div>}
+        {addError && <div>Something went wrong...</div>}
 
       </div>
     );

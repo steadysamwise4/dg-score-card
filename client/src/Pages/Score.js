@@ -5,66 +5,45 @@ import { useMutation, useQuery } from "@apollo/client";
 import { ADD_SCORE, DELETE_ROUND } from "../utils/mutations";
 import { QUERY_ALL_COURSES, QUERY_ROUND } from "../utils/queries";
 import ScoreModal from "../components/ScoreModal";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 
 function ScorePage() {
   const navigate = useNavigate();
+  const location = useLocation();
+  console.log(location);
   const { roundId: roundParam } = useParams();
   const [addScore, { error }] = useMutation(ADD_SCORE, {
     refetchQueries: [QUERY_ROUND],
   });
-
   const { loading, data } = useQuery(QUERY_ROUND, {
-    variables: { roundId: roundParam },
+    variables: { id: roundParam },
   });
   const round = data?.round || {};
-
-  const { courseLoading, data: courseData } = useQuery(QUERY_ALL_COURSES);
-  const courses = courseData?.courses || [];
-  const matchingCourse = courses?.find(
-    (course) => course?.courseName === round.courseName
-  );
-
+  
   console.log(round);
-  console.log(matchingCourse);
-
+  
+  
   const [totalScore, setTotalScore] = useState(0);
   const [holeNumber, setHoleNumber] = useState(1);
-  const [index, setIndex] = useState(1);
+  const [index, setIndex] = useState(0);
   const [holePar, setHolePar] = useState(null);
-  
-  console.log(holePar);
-
-  // useEffect(() => {
-  //   setTimeout(() => {
-  //     console.log(matchingCourse)
-  //   }, 2000)
-  //   .then(() => {
-  //     setHolePar(matchingCourse.holes[index].par);
-  //   });
-  // // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, []);
-
   const [holeLength, setHoleLength] = useState('');
-  
-  console.log(holeLength);
- 
-  // useEffect(() => {
-  //   setTimeout(() => {
-  //     console.log(matchingCourse)
-  //   }, 2000)
-  //   .then(() => {
-  //     setHoleLength(matchingCourse.holes[index].length);
-  //   });
-  // // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, []);
-
   const [stroke, setStroke] = useState(3);
   const [show, setShow] = useState(false);
-  
+  const [started, setStarted] = useState(false);
 
+  console.log(round);
+  
   const toggleModal = () => {
     setShow(!show);
+   
+  };
+
+  const startRound = () => {
+    setStarted(true);
+    setHolePar(round.course[0].holes[index].par);
+    setHoleLength(round.course[0].holes[index].length)
+    setIndex(index + 1);
   };
 
   const addStroke = () => {
@@ -92,12 +71,12 @@ function ScorePage() {
       const newTotalScore = updatedRound.data.addScore.totalScore;
       setStroke(3);
       
-      if (holeNumber === matchingCourse.holeCount) {
+      if (holeNumber === round.course[0].holeCount) {
         navigate(`/profile`);
       } else {
         setHoleNumber(holeNumber + 1);
-        setHolePar(matchingCourse.holes[index].par);
-        setHoleLength(matchingCourse.holes[index].length);
+        setHolePar(round.course[0].holes[index].par);
+        setHoleLength(round.course[0].holes[index].length);
         setTotalScore(newTotalScore);
         setIndex(index + 1);
        
@@ -106,29 +85,23 @@ function ScorePage() {
       console.error(e);
     }
   };
-  const FindPar = (cntCourseName, i) => {
-    const holeNum = i;
-    for (let i = 0; i < courses.length; i++) {
-      const course = courses[i];
-      if (cntCourseName === course.courseName) {
-        // console.log(course);
-        const holePar = course.holes[holeNum].par;
-        return holePar;
-      }
-    }
-  };
-  const FindParTotal = (cntCourseName, holeNum) => {
-    for (let i = 0; i < courses.length; i++) {
-      const course = courses[i];
-      if (cntCourseName === course.courseName) {
-        const holesArr = course.holes;
+  // const FindPar = (cntCourseName, i) => {
+  //   const holeNum = i;
+  //   for (let i = 0; i < courses.length; i++) {
+  //     const course = courses[i];
+  //     if (cntCourseName === course.courseName) {
+  //       // console.log(course);
+  //       const holePar = course.holes[holeNum].par;
+  //       return holePar;
+  //     }
+  //   }
+  // };
+  const FindParTotal = (holeNum) => {
         let total = 0;
-        for (let j = 0; j < holeNum - 1; j++) {
-          total += holesArr[j].par;
+        for (let i = 1;i<holeNum; i++) {
+          total += round.course[0].holes[i].par;
         }
         return total;
-      }
-    }
   };
 
   const findScore = (par) => {
@@ -137,8 +110,9 @@ function ScorePage() {
       return `+${score}`;
     } else if (score < 0) {
       return `${score}`;
+    } else {
+      return 'Even';
     }
-    return score;
   };
 
   const [deleteRound, { err }] = useMutation(DELETE_ROUND);
@@ -157,12 +131,22 @@ function ScorePage() {
   };
  
 
-  if (loading || courseLoading) {
+  if (loading) {
     return (
       <div className='d-flex justify-content-center'>
         <h1 className='alt-heading animate__animated  animate__bounce'>
           Loading...
         </h1>
+      </div>
+    );
+  }
+
+  if (!started) {
+    return (
+      <div className='d-flex justify-content-center'>
+         <button id='addBtn' className='button w-50' onClick={startRound}>
+          Begin Round
+        </button>
       </div>
     );
   }
@@ -172,18 +156,18 @@ function ScorePage() {
         show={show}
         handleClose={toggleModal}
         round={round}
-        FindPar={FindPar}
+        FindParTotal={FindParTotal}
       />
       <div className='d-flex flex-column align-items-center'>
         <div className='card-heading text-center'>
           <h1 className='alt-heading'>Hole #{holeNumber}</h1>
-          <h2 className='alt-sub-heading'>{round.courseName}</h2>
+          <h2 className='alt-sub-heading'>{round.course[0].courseName}</h2>
           <h2 className='alt-sub-heading'>Par: {holePar}</h2>
           <h2 className='alt-sub-heading'>Length: {holeLength} ft</h2>
 
           <h3 className='alt-sub-heading'>
-            Total Score:{" "}
-            {findScore(FindParTotal(round.courseName, holeNumber), totalScore)}
+            Score:{" "}
+            {findScore(FindParTotal(holeNumber))}
           </h3>
         </div>
         <button className='button-go btn-lg my-3' onClick={() => toggleModal()}>
@@ -209,7 +193,7 @@ function ScorePage() {
         </button>
         <div>
           <button onClick={handleAddScore} className='button-go my-5'>
-            {holeNumber === matchingCourse?.holeCount ? (
+            {holeNumber === round.course[0].holeCount ? (
               <p>Finish</p>
             ) : (
               <p>Next Hole</p>

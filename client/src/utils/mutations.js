@@ -54,9 +54,9 @@ export const CREATE_COURSE = gql`
       location
       holeCount
       holes {
-        _id
         holeNumber
         par
+        length
       }
     }
   }
@@ -68,7 +68,20 @@ export const ADD_HOLE = gql`
       _id
       holeCount
       holes {
-        _id
+        holeNumber
+        par
+        length
+      }
+    }
+  }
+`;
+
+export const ADD_HOLES = gql`
+  mutation addHole($courseId: ID!, $holesArr: Float!) {
+    addHoles(courseId: $courseId, holesArr: $holesArr) {
+      _id
+      courseName
+      holes {
         holeNumber
         par
         length
@@ -78,17 +91,30 @@ export const ADD_HOLE = gql`
 `;
 
 export const ADD_ROUND = gql`
-  mutation addRound($courseName: String!) {
-    addRound(courseName: $courseName) {
+mutation addRound($course: ID!) {
+  addRound(course: $course) {
+    _id
+    createAt
+    username
+    course {
       _id
       courseName
-      createAt
-      scores {
+      location
+      holes {
         holeNumber
-        stroke
+        par
+        length
       }
+      holeCount
+      parTotal
     }
+    scores {
+      holeNumber
+      stroke
+    }
+    totalScore
   }
+}
 `;
 
 export const DELETE_ROUND = gql`
@@ -96,8 +122,12 @@ export const DELETE_ROUND = gql`
     deleteRound(roundId: $roundId) {
       _id
       username
-      courseName
       createAt
+      course {
+        courseName
+        holeCount
+        parTotal
+      }
     }
   }
 `;

@@ -2,15 +2,16 @@ import React from 'react';
 import Modal from 'react-bootstrap/Modal';
 import Table from 'react-bootstrap/Table';
 
-function ScoreModal({ show, handleClose, round, FindPar }) {
+function ScoreModal({ show, handleClose, round, FindParTotal }) {
   let total = 0;
-  const findScoreTotal = (cntStrokes, i) => {
-    const par = FindPar(round.courseName, i);
+  const findScoreTotal = (cntStrokes, par) => {
     total += cntStrokes - par;
-    if (total <= 0) {
+    if (total < 0) {
       return total;
-    } else {
+    } else if (total > 0) {
       return `+${total}`;
+    } else {
+      return 'Even'
     }
   };
 
@@ -40,9 +41,9 @@ function ScoreModal({ show, handleClose, round, FindPar }) {
             {round.scores.map((score, i) => (
               <tr key={i}>
                 <th scope='row'>{score.holeNumber}</th>
-                <td>{FindPar(round.courseName, i)}</td>
+                <td>{round.course[0].holes[i].par}</td>
                 <td>{score.stroke}</td>
-                <td>{findScoreTotal(score.stroke, i)}</td>
+                <td>{findScoreTotal(score.stroke, round.course[0].holes[i].par)}</td>
               </tr>
             ))}
           </tbody>
