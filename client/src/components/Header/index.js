@@ -59,7 +59,15 @@ function Header() {
                   className="disc-icon"
                   alt="disc icon"
                 />
-                recard
+                recard {' '}
+                <a href='https://www.dgcoursereview.com/'>
+                <img
+                  src={require("../../assets/images/powered_by_dgcr_black.png")}
+
+                  alt="dgcr logo"
+                />
+                </a>
+
               </h1>
             </div>
             <div className="menu-items">

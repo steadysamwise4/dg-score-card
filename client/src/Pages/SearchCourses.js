@@ -129,11 +129,21 @@ const SearchCourses = () => {
       
     return (
       <div>
-        <form onSubmit={handleFormSubmit}>
+        <h5 className='card-heading d-flex justify-content-center'>{`Enter a zip code to search for courses - data provided by  `}
+          
+          <a href='https://www.dgcoursereview.com/'>
+                <img
+                  src={require("../assets/images/logo_100.png")}
+                  className='px-2'
+                  alt="dgcr logo"
+                />
+                </a>
+        </h5>
+        <form className='d-flex justify-content-center' onSubmit={handleFormSubmit}>
           <input value={zip} onChange={handleChange}></input>
           <button>Submit</button>
         </form>
-        <MDBCard style={{ width: "18rem" }} className='course-list'>
+        <MDBCard className ='course-list'  style={{ width: "18rem" }}>
         <MDBCardHeader className='text-center'>Courses near {zip}</MDBCardHeader>
         {searchedCourses[0] === "Bad Request" ? (<h6 style={{color: "red"}}>No Courses Found</h6>) : (
         <MDBListGroup flush>
