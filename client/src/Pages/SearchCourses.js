@@ -14,7 +14,7 @@ import {
   import { QUERY_ALL_COURSES } from "../utils/queries";
 
 const SearchCourses = () => {
-    const [zip, setZip] = useState(0);
+    const [zip, setZip] = useState('');
     const [searchedCourses, setSearchedCourses] = useState([]);
 
     const { loading, data } = useQuery(QUERY_ALL_COURSES, {});
@@ -32,6 +32,10 @@ const SearchCourses = () => {
         console.log(value);
 
         setZip(value)
+    }
+
+    const courseClickNoAuth = (event) => {
+
     }
 
     const handleFormSubmit = async (event) => {
@@ -128,49 +132,83 @@ const SearchCourses = () => {
       }
       
     return (
-      <div>
-        <h5 className='card-heading d-flex justify-content-center'>{`Enter a zip code to search for courses - data provided by  `}
-          
-          <a href='https://www.dgcoursereview.com/'>
-                <img
-                  src={require("../assets/images/logo_100.png")}
-                  className='px-2'
-                  alt="dgcr logo"
-                />
-                </a>
-        </h5>
-        <form className='d-flex justify-content-center' onSubmit={handleFormSubmit}>
-          <input value={zip} onChange={handleChange}></input>
-          <button>Submit</button>
-        </form>
-        <MDBCard className ='course-list'  style={{ width: "18rem" }}>
-        <MDBCardHeader className='text-center'>Courses near {zip}</MDBCardHeader>
-        {searchedCourses[0] === "Bad Request" ? (<h6 style={{color: "red"}}>No Courses Found</h6>) : (
-        <MDBListGroup flush>
-            {searchedCourses &&
-              searchedCourses.map((course) => (
-                <MDBListGroupItem
-                  key={course.course_id}
-                  className='list d-flex justify-content-between'
-                >
-                  {" "}
-                  {Auth.loggedIn() ? (
-                 <h6 onClick={handleCourseClick(course.course_id, course.holes)} className="searched_course_link" >{course.name}</h6>
-                 ) : (
-                  <h6>{course.name}</h6>
-                  )}
-                 <div>
-                 {course.city}, {course.state} - {course.holes} holes - Rating: <img alt="rating" src={course.rating_img_small} />
+      <div style={{ width: "350px", margin: "0 auto" }}>
+        <h3 className="card-heading d-flex justify-content-center">
+          {`Enter zip`}
 
-                 </div>
-                </MDBListGroupItem>
-              ))}
-          </MDBListGroup>
+          <a href="https://www.dgcoursereview.com/">
+            <img
+              src={require("../assets/images/logo_100.png")}
+              className="px-4 dgcr-link"
+              alt="dgcr logo"
+            />
+          </a>
+        </h3>
+        <form
+          className="d-flex flex-column justify-content-center "
+          onSubmit={handleFormSubmit}
+        >
+          <input
+            className="my-input"
+            value={zip}
+            onChange={handleChange}
+          ></input>
+          <button className="button-search">Submit</button>
+          {!Auth.loggedIn() ? (
+            <h3 className="sub-heading">
+              Log in or Sign up to start scoring a round
+            </h3>
+          ) : (
+            <></>
+          )}
+        </form>
+        <MDBCard className="course-list" style={{ width: "350px" }}>
+          <MDBCardHeader className="text-center text-medium">
+            Courses near {zip}
+          </MDBCardHeader>
+          {searchedCourses[0] === "Bad Request" ? (
+            <h6 style={{ color: "red" }}>No Courses Found</h6>
+          ) : (
+            <MDBListGroup flush>
+              {searchedCourses &&
+                searchedCourses.map((course) => (
+                  <MDBListGroupItem
+                    key={course.course_id}
+                    className="list d-flex flex-column justify-content-between"
+                  >
+                    {" "}
+                    {Auth.loggedIn() ? (
+                      <h5
+                        onClick={handleCourseClick(
+                          course.course_id,
+                          course.holes
+                        )}
+                        className="searched_course_link"
+                      >
+                        {course.name}
+                      </h5>
+                    ) : (
+                      <h5>{course.name}</h5>
+                    )}
+                    <div>
+                      <div>
+                        {course.city}, {course.state} - {course.holes} holes
+                      </div>
+                      <div>
+                        Rating:{" "}
+                        <img alt="rating" src={course.rating_img_small} />
+                      </div>
+                    </div>
+                  </MDBListGroupItem>
+                ))}
+            </MDBListGroup>
           )}
         </MDBCard>
+        <button type="button" className="button d-flex justify-content-center">
+          Go Back
+        </button>
         {error && <div>Something went wrong...</div>}
         {addError && <div>Something went wrong...</div>}
-
       </div>
     );
 

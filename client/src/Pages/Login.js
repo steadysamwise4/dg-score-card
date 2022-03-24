@@ -44,9 +44,9 @@ const Login = (props) => {
       <div className='form'>
         <h2 className='heading d-flex justify-content-center'>Login</h2>
         <div className='d-flex justify-content-center'>
-          <form className='col-12 col-md-6' onSubmit={handleFormSubmit}>
+          <form className='' onSubmit={handleFormSubmit}>
             <input
-              className='form-input'
+              className='my-input'
               placeholder='Your email'
               name='email'
               type='email'
@@ -56,7 +56,7 @@ const Login = (props) => {
               autoComplete='on'
             />
             <input
-              className='form-input'
+              className='my-input'
               placeholder='******'
               name='password'
               type='password'

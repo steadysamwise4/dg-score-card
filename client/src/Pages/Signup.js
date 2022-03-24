@@ -44,9 +44,9 @@ const Signup = () => {
         <div>
           <h2 className='heading d-flex justify-content-center'>Sign Up</h2>
           <div className='d-flex justify-content-center'>
-            <form className='col-12 col-md-3' onSubmit={handleFormSubmit}>
+            <form className='' onSubmit={handleFormSubmit}>
               <input
-                className='form-input'
+                className='my-input'
                 placeholder='Your username'
                 name='username'
                 type='username'
@@ -56,7 +56,7 @@ const Signup = () => {
                 autoComplete='on'
               />
               <input
-                className='form-input'
+                className='my-input'
                 placeholder='Your email'
                 name='email'
                 type='email'
@@ -66,7 +66,7 @@ const Signup = () => {
                 autoComplete='on'
               />
               <input
-                className='form-input'
+                className='my-input'
                 placeholder='******'
                 name='password'
                 type='password'

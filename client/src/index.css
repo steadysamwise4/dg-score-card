@@ -85,9 +85,27 @@ code {
   font-weight: 600;
 }
 
+.button-search {
+  background-color: var(--secondary);
+  margin: 10px auto;
+  color: var(--tertiary);
+  text-decoration: none;
+  border-radius: 14px;
+  font-size: 25px;
+  font-weight: 600;
+  text-align: center;
+  width: 350px;
+  height: 50px;
+}
+
+.button-search:hover {
+  background-color: var(--tertiary);
+  color:black;
+}
+
 
 .sub-heading {
-  margin: 10px 10px;
+  margin: 10px auto;
   padding: 6px 6px;
   text-align: center;
   border-radius: 12px;
@@ -96,6 +114,7 @@ code {
   background-color: var(--primary);
   border: solid var(--dark);
   opacity: 90%;
+  width: 350px;
 }
 
 .alt-sub-heading {
@@ -110,14 +129,22 @@ code {
   border: solid;
   opacity: 90%;
 }
-.form-input {
+.my-input {
   padding: 5px 10px;
-  font-size: 14px;
+  font-size: 25px;
+  font-weight: 500;
   text-align: center;
-  margin: 10px 10px;
-  height: 70px;
+  margin: 10px auto;
+  height: 50px;
+  width: 350px;
   color: var(--dark);
   border: var (--primary);
+  border-radius: 10px;
+}
+
+.text-medium {
+  font-size: large;
+  font-weight: bold;
 }
 
 .text-error {
@@ -125,9 +152,8 @@ code {
 }
 
 .form {
-  padding: 5%;
+  width: 350px;
 }
-
 .table {
   max-height: 400px;
   overflow: scroll;
@@ -175,7 +201,7 @@ code {
 }
 
 .card-heading {
-  margin: 12px 12px 12px 12px;
+  margin: 12px auto;
   padding: 5px 5px 5px 5px;
   border-radius: 12px;
   border: solid;
@@ -187,13 +213,14 @@ code {
 
 .button {
   background-color: var(--primary);
-  margin: 15px 15px;
+  margin: 10px auto;
   color: var(--tertiary);
   text-decoration: none;
   border-radius: 14px;
   font-size: 20px;
   text-align: center;
-  padding: 10px 10px 10px 10px;
+  padding: 10px;
+  width: 350px;
 }
 
 .launch-history {
@@ -220,8 +247,9 @@ code {
 }
 
 .button:hover {
-  opacity: 90%;
-  background-color: var(--error);
+  background-color: var(--tertiary);
+  color: black;
+  font-weight: 600;
 }
 
 .button-secondary {
