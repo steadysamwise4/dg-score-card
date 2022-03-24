@@ -10,37 +10,38 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 function Header() {
-  const menu = useRef();
+  // const menu = useRef();
 
-  const [checked, setChecked] = useState(false);
-  const logout = (event) => {
-    event.preventDefault();
-    Auth.logout();
-  };
+  // const [checked, setChecked] = useState(false);
+  // const logout = (event) => {
+  //   event.preventDefault();
+  //   Auth.logout();
+  // };
 
-  useEffect(() => {
-    const checkIfClickedOutside = (e) => {
-      // If the menu is open and the clicked target is not within the menu,
-      // then close the menu
-      if (checked && menu.current && !menu.current.contains(e.target)) {
-        setChecked(false);
-      }
-    };
+  // useEffect(() => {
+  //   const checkIfClickedOutside = (e) => {
+  //     // If the menu is open and the clicked target is not within the menu,
+  //     // then close the menu
+  //     if (checked && menu.current && !menu.current.contains(e.target)) {
+  //       setChecked(false);
+  //     }
+  //   };
 
-    document.addEventListener("mousedown", checkIfClickedOutside);
+  //   document.addEventListener("mousedown", checkIfClickedOutside);
 
-    return () => {
-      // Cleanup the event listener
-      document.removeEventListener("mousedown", checkIfClickedOutside);
-    };
-  }, [checked]);
+  //   return () => {
+  //     // Cleanup the event listener
+  //     document.removeEventListener("mousedown", checkIfClickedOutside);
+  //   };
+  // }, [checked]);
 
   return (
     <section className={HeaderClasses.Header}>
       <nav>
-        <div className="navbar">
-          <div ref={menu} className="container nav-container" id="menu">
-            <input
+        <div className="my-navbar p-3 mb-2">
+          <div  className="nav-container" id="menu">
+            {/* <input
+            ref={menu}
               checked={checked}
               className="checkbox"
               type="checkbox"
@@ -50,9 +51,14 @@ function Header() {
               <span className="line line1"></span>
               <span className="line line2"></span>
               <span className="line line3"></span>
-            </div>
-            <div className="logo">
-              <h1>
+            </div> */}
+            {/* <div className="logo"> */}
+              <h1 className='mt-4'>
+              <img
+                  src={require("../../assets/images/mini-basket.png")}
+                  className='pb-3'
+                  alt="mini-basket"
+                /> {'  '}
                 DG-Sc
                 <img
                   src={require("../../assets/images/favicon.png")}
@@ -63,14 +69,15 @@ function Header() {
                 <a href='https://www.dgcoursereview.com/'>
                 <img
                   src={require("../../assets/images/powered_by_dgcr_black.png")}
-
+                  className='pb-3 dgcr-link'
                   alt="dgcr logo"
+                  style={{ width:'80px' }}
                 />
                 </a>
 
               </h1>
-            </div>
-            <div className="menu-items">
+            {/* </div> */}
+            {/* <div className="menu-items">
               <li>
                 <FontAwesomeIcon className="dropdown-icon" icon={faHouse} />
                 <Link to="/">
@@ -101,7 +108,7 @@ function Header() {
                   </Link>
                 </li>
               )}
-            </div>
+            </div> */}
           </div>
         </div>
       </nav>
