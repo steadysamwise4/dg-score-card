@@ -47,7 +47,7 @@ const resolvers = {
     },
     round: async (parent, { _id }) => {
       const params = _id ? { _id } : {};
-      return Round.findById(params).populate('course');
+      return Round.findById(params);
     },
   },
   Mutation: {
@@ -124,7 +124,7 @@ const resolvers = {
           { new: true }
         );
 
-        return round.populate('course');
+        return round;
       }
 
       throw new AuthenticationError('You need to be logged in!');

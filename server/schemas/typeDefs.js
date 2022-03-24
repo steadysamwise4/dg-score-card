@@ -29,7 +29,7 @@ const typeDefs = gql`
     _id: ID
     createAt: String
     username: String
-    course: [Course]
+    courseName: String
     scores: [Score]
     totalScore: Int
   }
@@ -54,7 +54,7 @@ const typeDefs = gql`
     addFriend(friendId: ID!): User
     addCourse(courseId: ID!): User
     removeCourse(courseId: ID!): User
-    addRound(course: ID!): Round
+    addRound(courseName: String!): Round
     deleteRound(roundId: ID!): Round
     deleteCourses: Course
     createCourse(

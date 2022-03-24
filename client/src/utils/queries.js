@@ -54,18 +54,7 @@ query round($id: ID!) {
     _id
     createAt
     username
-    course {
-      _id
-      courseName
-      location
-      holes {
-        holeNumber
-        par
-        length
-      }
-      holeCount
-      parTotal
-    }
+    courseName
     scores {
       holeNumber
       stroke
@@ -127,17 +116,7 @@ query me {
       _id
       createAt
       username
-      course {
-        courseName
-        location
-        holes {
-          holeNumber
-          par
-          length
-        }
-        holeCount
-        parTotal
-      }
+      courseName
       scores {
         holeNumber
         stroke

@@ -6,26 +6,17 @@ import {
     MDBListGroupItem,
   } from "mdb-react-ui-kit";
   import Auth from "../utils/auth";
-  import { useNavigate } from "react-router-dom";
-  import { organizeHoleData } from "../utils/data/organizeHoleData";
-  import { useQuery, useMutation } from "@apollo/client";
-  import { CREATE_COURSE } from "../utils/mutations";
-  import { ADD_HOLE } from "../utils/mutations";
-  import { QUERY_ALL_COURSES } from "../utils/queries";
+  import { Link } from "react-router-dom";
+  import RoundConfirmModal from "../components/RoundConfirmModal";
 
 const SearchCourses = () => {
     const [zip, setZip] = useState('');
+    const [show, setShow] = useState(false);
+    const [clickedCourseId, setClickedCourseId] = useState('');
+    const [clickedCourseName, setClickedCourseName] = useState('');
     const [searchedCourses, setSearchedCourses] = useState([]);
 
-    const { loading, data } = useQuery(QUERY_ALL_COURSES, {});
-    const mongoCourseData = data?.courses;
-
-
-    const [createCourse, { error }] = useMutation(CREATE_COURSE);
-
-    const navigate = useNavigate();
-
-    const [addHole, { addError }] = useMutation(ADD_HOLE);
+   
 
     const handleChange = (event) => {
         const { value }  = event.target;
@@ -34,9 +25,9 @@ const SearchCourses = () => {
         setZip(value)
     }
 
-    const courseClickNoAuth = (event) => {
-
-    }
+    const toggleModal = () => {
+      setShow(!show);
+    };
 
     const handleFormSubmit = async (event) => {
         event.preventDefault();
@@ -62,77 +53,86 @@ const SearchCourses = () => {
         }
     }
 
-    const handleCourseClick = (dgcr_id, holes) => async (e) => {
-        e.preventDefault();
-        const response = await fetch(`http://localhost:3001/dgcr_api/hole/${dgcr_id}`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json' 
-            }
-        });
-        if (response.ok) {
-            const data = await response.json();
-            const holeData= organizeHoleData(data);
+    const handleCourseClick = (dgcr_id, name) => async (e) => {
+      e.preventDefault();
+      setClickedCourseId(dgcr_id);
+      setClickedCourseName(name);
+      toggleModal();
+        
+        
+        // const response = await fetch(`http://localhost:3001/dgcr_api/hole/${dgcr_id}`, {
+        //     method: 'GET',
+        //     headers: {
+        //         'Content-Type': 'application/json' 
+        //     }
+        // });
+        // if (response.ok) {
+        //     const data = await response.json();
+        //     const holeData= organizeHoleData(data);
 
-            const matchingCourse = mongoCourseData.find(
-              (course) => course.courseName === data[0].name.trim()
-            );
+        //     const matchingCourse = mongoCourseData.find(
+        //       (course) => course.courseName === data[0].name.trim()
+        //     );
           
-            if (!matchingCourse) { 
+        //     if (!matchingCourse) { 
 
-            try {
-                // execute createCourse mutation and pass in variable data from form
-                const newCourse = await createCourse({
-                  variables: {
-                    courseName: data[0].name,
-                    location: `${data[0].city}, ${data[0].state}`,
-                    holeCount: parseInt(holes),
-                  },
-                });
-                console.log(holeData);
-                for (let i=0;i<holeData.length;i++) {
-                    const updatedCourse = await addHole({
-                        variables: {
-                          courseId: newCourse.data.createCourse._id,
-                          holeNumber: holeData[i].holeNumber,
-                          par: holeData[i].par,
-                          length: holeData[i].length,
-                        }
-                      });
-                      if (updatedCourse) {
-                        continue;
-                      } else {
-                        setTimeout(() => {
-                          console.log('...loading')
-                        }, 500)
-                      }
-                    }
+        //     try {
+        //         // execute createCourse mutation and pass in variable data from form
+        //         const newCourse = await createCourse({
+        //           variables: {
+        //             courseName: data[0].name,
+        //             location: `${data[0].city}, ${data[0].state}`,
+        //             holeCount: parseInt(holes),
+        //           },
+        //         });
+        //         console.log(holeData);
+        //         for (let i=0;i<holeData.length;i++) {
+        //             const updatedCourse = await addHole({
+        //                 variables: {
+        //                   courseId: newCourse.data.createCourse._id,
+        //                   holeNumber: holeData[i].holeNumber,
+        //                   par: holeData[i].par,
+        //                   length: holeData[i].length,
+        //                 }
+        //               });
+        //               if (updatedCourse) {
+        //                 continue;
+        //               } else {
+        //                 setTimeout(() => {
+        //                   console.log('...loading')
+        //                 }, 500)
+        //               }
+        //             }
 
-                navigate(`/newround/${newCourse.data.createCourse._id}`);
-              } catch (e) {
-                console.error(e);
-              }
-            } else {
-              navigate(`/newround/${matchingCourse._id}`);
-            }
-
-        } else {
-            console.log(response.statusText)
-        }
+        //         navigate(`/newround/${newCourse.data.createCourse._id}`);
+        //       } catch (e) {
+        //         console.error(e);
+        //       }
+        //     } else {
+        //       navigate(`/newround/${matchingCourse._id}`);
+        //     }
+        
     }
+    console.log(searchedCourses);
 
-    if (loading) {
-        return (
-          <div className='d-flex justify-content-center'>
-            <h1 className='alt-heading animate__animated  animate__bounce'>
-              Loading...
-            </h1>
-          </div>
-        );
-      }
+    // if (loading) {
+    //     return (
+    //       <div className='d-flex justify-content-center'>
+    //         <h1 className='alt-heading animate__animated  animate__bounce'>
+    //           Loading...
+    //         </h1>
+    //       </div>
+    //     );
+    //   }
       
     return (
       <div style={{ width: "350px", margin: "0 auto" }}>
+        <RoundConfirmModal
+        show={show}
+        handleClose={toggleModal}
+        name={clickedCourseName}
+        dgcr_id={clickedCourseId}
+      />
         <h3 className="card-heading d-flex justify-content-center">
           {`Enter zip`}
 
@@ -181,7 +181,7 @@ const SearchCourses = () => {
                       <h5
                         onClick={handleCourseClick(
                           course.course_id,
-                          course.holes
+                          course.name
                         )}
                         className="searched_course_link"
                       >
@@ -204,11 +204,11 @@ const SearchCourses = () => {
             </MDBListGroup>
           )}
         </MDBCard>
+        <Link to='/' className='text-no-decoration'>
         <button type="button" className="button d-flex justify-content-center">
           Go Back
         </button>
-        {error && <div>Something went wrong...</div>}
-        {addError && <div>Something went wrong...</div>}
+        </Link>
       </div>
     );
 

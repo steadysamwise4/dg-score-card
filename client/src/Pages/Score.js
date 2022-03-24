@@ -2,10 +2,11 @@ import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faMinus, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { useMutation, useQuery } from "@apollo/client";
-import { ADD_SCORE, DELETE_ROUND } from "../utils/mutations";
+import { ADD_SCORE, DELETE_ROUND, ADD_ROUND } from "../utils/mutations";
 import { QUERY_ALL_COURSES, QUERY_ROUND } from "../utils/queries";
 import ScoreModal from "../components/ScoreModal";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
+import { organizeHoleData } from "../utils/data/organizeHoleData";
 
 function ScorePage() {
   const navigate = useNavigate();
@@ -15,15 +16,16 @@ function ScorePage() {
   const [addScore, { error }] = useMutation(ADD_SCORE, {
     refetchQueries: [QUERY_ROUND],
   });
+ 
   const { loading, data } = useQuery(QUERY_ROUND, {
-    variables: { id: roundParam },
+    variables: { id: roundParam  },
   });
   const round = data?.round || {};
-  
+  const dgcr_id = location.state.dgcr_id;
   console.log(round);
   
-  
   const [totalScore, setTotalScore] = useState(0);
+  const [holesArr, setHolesArr] = useState([]);
   const [holeNumber, setHoleNumber] = useState(1);
   const [index, setIndex] = useState(0);
   const [holePar, setHolePar] = useState(null);
@@ -32,20 +34,44 @@ function ScorePage() {
   const [show, setShow] = useState(false);
   const [started, setStarted] = useState(false);
 
-  console.log(round);
+  
   
   const toggleModal = () => {
     setShow(!show);
    
   };
 
-  const startRound = () => {
-    setStarted(true);
-    setHolePar(round.course[0].holes[index].par);
-    setHoleLength(round.course[0].holes[index].length)
-    setIndex(index + 1);
-  };
+  const startRound = async (e) => {
+    e.preventDefault();
+    const response = await fetch(`http://localhost:3001/dgcr_api/hole/${dgcr_id}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json' 
+            }
+        });
+        if (response.ok) {
+            const data = await response.json();
+            const holeData= organizeHoleData(data);
+            console.log(holeData)
 
+            try {
+              setStarted(true);
+              setHolesArr(holeData);
+              setHolePar(holeData[index].par);
+              setHoleLength(holeData[index].length)
+              setIndex(index + 1);
+             
+
+            } catch (e) {
+              console.log(e);
+            }
+        
+   
+         
+  }else {
+    console.log(response.statusText)
+  }
+  }
   const addStroke = () => {
     let score = document.getElementById("strokeTotal").value;
     let newScore = ++score;
@@ -71,12 +97,12 @@ function ScorePage() {
       const newTotalScore = updatedRound.data.addScore.totalScore;
       setStroke(3);
       
-      if (holeNumber === round.course[0].holeCount) {
+      if (holeNumber === holesArr.length ) {
         navigate(`/profile`);
       } else {
         setHoleNumber(holeNumber + 1);
-        setHolePar(round.course[0].holes[index].par);
-        setHoleLength(round.course[0].holes[index].length);
+        setHolePar(holesArr[index].par);
+        setHoleLength(holesArr[index].length);
         setTotalScore(newTotalScore);
         setIndex(index + 1);
        
@@ -99,7 +125,7 @@ function ScorePage() {
   const FindParTotal = (holeNum) => {
         let total = 0;
         for (let i = 1;i<holeNum; i++) {
-          total += round.course[0].holes[i].par;
+          total += holesArr[i].par;
         }
         return total;
   };
@@ -144,7 +170,7 @@ function ScorePage() {
   if (!started) {
     return (
       <div className='d-flex justify-content-center'>
-         <button id='addBtn' className='button w-50' onClick={startRound}>
+         <button id='addBtn' className='button' onClick={startRound}>
           Begin Round
         </button>
       </div>
@@ -157,11 +183,12 @@ function ScorePage() {
         handleClose={toggleModal}
         round={round}
         FindParTotal={FindParTotal}
+        holesArr={holesArr}
       />
       <div className='d-flex flex-column align-items-center'>
         <div className='card-heading text-center'>
           <h1 className='alt-heading'>Hole #{holeNumber}</h1>
-          <h2 className='alt-sub-heading'>{round.course[0].courseName}</h2>
+          <h2 className='alt-sub-heading'>{location.state.courseName}</h2>
           <h2 className='alt-sub-heading'>Par: {holePar}</h2>
           <h2 className='alt-sub-heading'>Length: {holeLength} ft</h2>
 
@@ -193,7 +220,7 @@ function ScorePage() {
         </button>
         <div>
           <button onClick={handleAddScore} className='button-go my-5'>
-            {holeNumber === round.course[0].holeCount ? (
+            {holeNumber === holesArr.length ? (
               <p>Finish</p>
             ) : (
               <p>Next Hole</p>

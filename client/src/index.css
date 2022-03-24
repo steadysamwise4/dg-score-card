@@ -147,6 +147,10 @@ code {
   font-weight: bold;
 }
 
+.text-no-decoration {
+  text-decoration: none;
+}
+
 .text-error {
   color: var(--error);
 }
@@ -221,6 +225,24 @@ code {
   text-align: center;
   padding: 10px;
   width: 350px;
+}
+
+.modal-button {
+  background-color: var(--primary);
+  margin: 10px auto;
+  color: var(--tertiary);
+  text-decoration: none;
+  border-radius: 14px;
+  font-size: 20px;
+  text-align: center;
+  padding: 10px;
+  width: 250px;
+}
+
+.modal-button:hover {
+  background-color: var(--tertiary);
+  color: black;
+  font-weight: 600;
 }
 
 .launch-history {

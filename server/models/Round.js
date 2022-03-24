@@ -26,11 +26,10 @@ const roundSchema = new Schema(
             required: true
         },
         scores: [scoreSchema],
-        course: [
-            {
-            type: Schema.Types.ObjectId,
-            ref: Course
-        }]
+        courseName: {
+            type: String,
+            required: true,
+        }
     },
     {
         toJSON: {

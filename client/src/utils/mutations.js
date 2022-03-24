@@ -91,23 +91,12 @@ export const ADD_HOLES = gql`
 `;
 
 export const ADD_ROUND = gql`
-mutation addRound($course: ID!) {
-  addRound(course: $course) {
+mutation addRound($courseName: String!) {
+  addRound(courseName: $courseName) {
     _id
     createAt
     username
-    course {
-      _id
-      courseName
-      location
-      holes {
-        holeNumber
-        par
-        length
-      }
-      holeCount
-      parTotal
-    }
+    courseName
     scores {
       holeNumber
       stroke
