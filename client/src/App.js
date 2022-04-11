@@ -22,6 +22,7 @@ import SearchCourses from "./Pages/SearchCourses";
 import CourseForm from "./components/CourseForm";
 import AddHole from "./components/AddHole";
 import NoMatch from "../src/Pages/NoMatch";
+import Options from "./components/Options";
 
 const httpLink = createHttpLink({
   uri: "/graphql",
@@ -60,6 +61,7 @@ function App() {
       <div className='flex-column justify-flex-start min-100-vh'>
         <Router>
           <Header></Header>
+          <Options></Options>
           <main>
             <Routes>
               <Route exact path="/" element={<Home />} />
