@@ -62,3 +62,9 @@ export function dateFormat(date) {
   }
   return `${month}/${day}/${year}`;
 }
+
+export function shortenDate(date) {
+  const dateArr = date.split(' ');
+  const newDateArr = [dateArr[0], dateArr[1], dateArr[2]];
+  return newDateArr.join(' ');
+}

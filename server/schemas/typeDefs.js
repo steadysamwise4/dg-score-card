@@ -10,6 +10,7 @@ const typeDefs = gql`
     courses: [Course]
     rounds: [Round]
     coursesPlayed: [String]
+    createdAt: String
   }
   type Course {
     _id: ID

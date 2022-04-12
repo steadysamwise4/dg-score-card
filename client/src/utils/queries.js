@@ -100,6 +100,7 @@ query me {
     _id
     username
     email
+    createdAt
     courses {
       _id
       courseName

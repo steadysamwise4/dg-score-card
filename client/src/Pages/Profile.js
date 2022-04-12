@@ -9,6 +9,7 @@ import HistoryTable from "../components/HistoryTable";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowDown, faArrowUp } from "@fortawesome/free-solid-svg-icons";
 import Auth from "../utils/auth";
+import { shortenDate } from "../utils/helpers"
 
 function Profile() {
   const [show, setShow] = useState(false);
@@ -86,7 +87,9 @@ function Profile() {
       />
       <div className='flex-column'>
         <div className='card-heading d-flex flex-column align-items-center'>
-          <h1 className='alt-heading'>🥏 Welcome {user.username}!</h1>
+          <h1 className='alt-heading'>🥏 Welcome to your dashboard!</h1>
+          <h2>username: {user.username}</h2>
+          <h2>account created {shortenDate(user.createdAt)}</h2>
           <Link to={"/viewcourses"}>
             <button className='button-go my-4' as={NavLink} to={"/"}>
               Find a New Course
