@@ -90,11 +90,7 @@ function Profile() {
           <h1 className='alt-heading'>🥏 Welcome to your dashboard!</h1>
           <h2>username: {user.username}</h2>
           <h2>account created {shortenDate(user.createdAt)}</h2>
-          <Link to={"/viewcourses"}>
-            <button className='button-go my-4' as={NavLink} to={"/"}>
-              Find a New Course
-            </button>
-          </Link>
+         
           {user.courses.length === 0 && user.coursesPlayed.length === 0 ? (
             <div className='text-center animate__animated animate__shakeY animate__delay-3s animate__slower 3s'>
               <h2>
@@ -155,16 +151,16 @@ function Profile() {
               <div></div>
             ) : (
               <div className='card-heading'>
-                <HistoryTable
+                {/* <HistoryTable
                   user={user}
                   FindParTotal={FindParTotal}
                   findScore={findScore}
-                />
+                /> */}
                 <button
-                  className='button-go offset-3'
+                  className='button-go'
                   onClick={() => toggleModal()}
                 >
-                  View more history
+                  Score history
                 </button>
               </div>
             )}

@@ -11,7 +11,16 @@ const scoreSchema = new Schema({
     stroke: {
         type: Number,
         required: true
-    }
+    },
+    par: {
+        type: Number,
+        required: true
+    },
+    tag: {
+        type: String,
+        required: true
+    },
+
 });
 
 const roundSchema = new Schema(

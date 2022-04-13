@@ -64,9 +64,7 @@ function HistoryModal({ show, handleClose, findScore, FindParTotal }) {
             </thead>
             <tbody className='text-center'>
               {updatedUser.rounds
-                .slice(0)
                 .reverse()
-                .slice(3)
                 .map((round, i) => (
                   <tr key={i}>
                     <td>{dateFormat(round.createAt)}</td>

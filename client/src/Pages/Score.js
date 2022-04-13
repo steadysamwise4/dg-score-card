@@ -33,6 +33,8 @@ function ScorePage() {
   const [stroke, setStroke] = useState(3);
   const [show, setShow] = useState(false);
   const [started, setStarted] = useState(false);
+  const par = 3;
+  const tag = 'birdy';
 
   
   
@@ -92,7 +94,7 @@ function ScorePage() {
    
     try {
       const updatedRound = await addScore({
-        variables: { roundId: roundParam, holeNumber, stroke },
+        variables: { roundId: roundParam, holeNumber, par, stroke, tag },
       });
       const newTotalScore = updatedRound.data.addScore.totalScore;
       setStroke(3);

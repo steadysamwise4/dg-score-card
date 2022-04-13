@@ -122,8 +122,8 @@ export const DELETE_ROUND = gql`
 `;
 
 export const ADD_SCORE = gql`
-  mutation addScore($roundId: ID!, $holeNumber: Int!, $stroke: Int!) {
-    addScore(roundId: $roundId, holeNumber: $holeNumber, stroke: $stroke) {
+  mutation addScore($roundId: ID!, $holeNumber: Int!, $par: Int!, $stroke: Int!, $tag: String!) {
+    addScore(roundId: $roundId, holeNumber: $holeNumber, par: $par, stroke: $stroke, tag: $tag) {
       totalScore
       scores {
         holeNumber
