@@ -36,6 +36,7 @@ function ScorePage() {
   const [stroke, setStroke] = useState(3);
   const [show, setShow] = useState(false);
   const [started, setStarted] = useState(false);
+  const [inputError, setInputError] = useState('');
   const par = 3;
   const tag = 'birdy';
 
@@ -94,6 +95,13 @@ function ScorePage() {
   };
   const handleAddScore =  async (event) => {
     event.preventDefault();
+    if (stroke < 1) {
+      setInputError('Please enter a valid response!');
+      console.log('Please enter a valid response!');
+      return
+    } else {
+      setInputError('');
+    }
    
     try {
       const updatedRound = await addScore({
@@ -206,35 +214,27 @@ function ScorePage() {
           View Score Card
         </button>
         <InputGroup className="mb-3" style={{ width: '350px'}}>
-    <Button variant="outline-secondary" id="button-addon1">
+    <Button variant="outline-secondary" id="button-addon1" onClick={addStroke}>
     ➕
     </Button>
     <FormControl
       aria-label="Example text with button addon"
       aria-describedby="basic-addon1"
+      value={stroke}
+      className='text-center w-50 fs-1'
+      onChange={(e) => setStroke(Number(e.target.value))}
+      type='number'
+      pattern='[0-9]*'
+      id='strokeTotal'
+      min={1}
+      step='1'
     />
-    <Button variant="outline-secondary" id="button-addon2">
+    <Button variant="outline-secondary" id="button-addon2" onClick={removeStroke}>
     ➖
     </Button>
   </InputGroup>
-        <button id='addBtn' className='button w-50' onClick={addStroke}>
-          <FontAwesomeIcon icon={faPlus} className='fs-1' />
-        </button>
-        <div className='d-flex justify-content-center my-1'>
-          <input
-            type='number'
-            pattern='[0-9]*'
-            id='strokeTotal'
-            min={1}
-            step='1'
-            className='text-center w-50 fs-1 mt-3'
-            value={stroke}
-            onChange={(e) => setStroke(e.target.value)}
-          />
-        </div>
-        <button id='subtractBtn' className='button w-50' onClick={removeStroke}>
-          <FontAwesomeIcon icon={faMinus} className='fs-1' />
-        </button>
+  {inputError && <div className='text-danger'>{inputError}</div>}
+        
         <div>
           <button onClick={handleAddScore} className='button-go my-5'>
             {holeNumber === holesArr.length ? (
