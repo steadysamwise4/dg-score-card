@@ -7,6 +7,9 @@ import { QUERY_ALL_COURSES, QUERY_ROUND } from "../utils/queries";
 import ScoreModal from "../components/ScoreModal";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { organizeHoleData } from "../utils/data/organizeHoleData";
+import Button from 'react-bootstrap/Button';
+import FormControl from 'react-bootstrap/FormControl';
+import InputGroup from 'react-bootstrap/InputGroup';
 
 function ScorePage() {
   const navigate = useNavigate();
@@ -202,6 +205,18 @@ function ScorePage() {
         <button className='button-go btn-lg my-3' onClick={() => toggleModal()}>
           View Score Card
         </button>
+        <InputGroup className="mb-3" style={{ width: '350px'}}>
+    <Button variant="outline-secondary" id="button-addon1">
+    ➕
+    </Button>
+    <FormControl
+      aria-label="Example text with button addon"
+      aria-describedby="basic-addon1"
+    />
+    <Button variant="outline-secondary" id="button-addon2">
+    ➖
+    </Button>
+  </InputGroup>
         <button id='addBtn' className='button w-50' onClick={addStroke}>
           <FontAwesomeIcon icon={faPlus} className='fs-1' />
         </button>
