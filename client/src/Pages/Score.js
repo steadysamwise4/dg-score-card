@@ -198,58 +198,81 @@ function ScorePage() {
         FindParTotal={FindParTotal}
         holesArr={holesArr}
       />
-      <div className='d-flex flex-column align-items-center'>
-        <div className='card-heading text-center'>
-          <h1 className='alt-heading'>Hole #{holeNumber}</h1>
-          <h2 className='alt-sub-heading'>{location.state.courseName}</h2>
-          <h2 className='alt-sub-heading'>Par: {holePar}</h2>
-          <h2 className='alt-sub-heading'>Length: {holeLength} ft</h2>
+      <div className="d-flex flex-column align-items-center">
+        <div className="card-heading text-center">
+          <h1 className="alt-heading">Hole #{holeNumber}</h1>
+          <h2 className="alt-sub-heading">{location.state.courseName}</h2>
+          <h2 className="alt-sub-heading">Par: {holePar}</h2>
+          <h2 className="alt-sub-heading">Length: {holeLength} ft</h2>
 
-          <h3 className='alt-sub-heading'>
-            Score:{" "}
-            {findScore(FindParTotal(holeNumber))}
+          <h3 className="alt-sub-heading">
+            Score: {findScore(FindParTotal(holeNumber))}
           </h3>
         </div>
-        <button className='button-go btn-lg my-3' onClick={() => toggleModal()}>
-          View Score Card
-        </button>
-        <InputGroup className="mb-3" style={{ width: '350px'}}>
-    <Button variant="outline-secondary" id="button-addon1" onClick={addStroke}>
-    ➕
-    </Button>
-    <FormControl
-      aria-label="Example text with button addon"
-      aria-describedby="basic-addon1"
-      value={stroke}
-      className='text-center w-50 fs-1'
-      onChange={(e) => setStroke(Number(e.target.value))}
-      type='number'
-      pattern='[0-9]*'
-      id='strokeTotal'
-      min={1}
-      step='1'
-    />
-    <Button variant="outline-secondary" id="button-addon2" onClick={removeStroke}>
-    ➖
-    </Button>
-  </InputGroup>
-  {inputError && <div className='text-danger'>{inputError}</div>}
-        
-        <div>
-          <button onClick={handleAddScore} className='button-go my-5'>
-            {holeNumber === holesArr.length ? (
-              <p>Finish</p>
-            ) : (
-              <p>Next Hole</p>
-            )}
+
+        {inputError && <div className="text-danger">{inputError}</div>}
+
+        <div className='d-flex flex-wrap align-items-center' style={{width: '350px'}}>
+          <button onClick={handleAddScore} className="button-quick">
+            Par
+          </button>
+          <button onClick={handleAddScore} className="button-quick">
+            Birdy
+          </button>
+          <button onClick={handleAddScore} className="button-quick">
+            Eagle
+          </button>
+          <button onClick={handleAddScore} className="button-quick">
+            Ace
+          </button>
+          <button onClick={handleAddScore} className="button-quick">
+            Bogey
+          </button>
+          <button onClick={handleAddScore} className="button-quick">
+            D.Bogey
+          </button>
+          <InputGroup className="" style={{ width: "350px" }}>
+            <Button
+              variant="outline-secondary"
+              id="button-addon1"
+              onClick={addStroke}
+            >
+              ➕
+            </Button>
+            <FormControl
+              aria-label="Example text with button addon"
+              aria-describedby="basic-addon1"
+              value={stroke}
+              className="text-center w-50 fs-1"
+              onChange={(e) => setStroke(Number(e.target.value))}
+              type="number"
+              pattern="[0-9]*"
+              id="strokeTotal"
+              min={1}
+              step="1"
+            />
+            <Button
+              variant="outline-secondary"
+              id="button-addon2"
+              onClick={removeStroke}
+            >
+              ➖
+            </Button>
+          </InputGroup>
+          <button onClick={handleAddScore} className="button-go">
+            Submit
           </button>
         </div>
+        <button className="button-go btn-lg my-3" onClick={() => toggleModal()}>
+          View Score Card
+        </button>
 
-        <button id='button-delete' onClick={handleDeleteRound}>
+        <button id="button-delete" onClick={handleDeleteRound}>
+          Abandon Round
           <FontAwesomeIcon
             icon={faTrash}
-            className='fatrash'
-            size='2x'
+            className="fatrash"
+            size="2x"
             style={{ color: "red" }}
           />
         </button>
