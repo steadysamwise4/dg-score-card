@@ -42,8 +42,8 @@ function ScoreModal({ show, handleClose, round, holesArr, FindParTotal }) {
               <tr key={i}>
                 <th scope='row'>{score.holeNumber}</th>
                 <td>{holesArr[i].par}</td>
-                <td>{score.stroke}</td>
-                <td>{findScoreTotal(score.stroke, holesArr[i].par)}</td>
+                <td>{score.holeStroke}</td>
+                <td>{findScoreTotal(score.holeStroke, holesArr[i].par)}</td>
               </tr>
             ))}
           </tbody>

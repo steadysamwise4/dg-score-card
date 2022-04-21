@@ -8,7 +8,7 @@ const scoreSchema = new Schema({
         type: Number,
         required: true
     },
-    stroke: {
+    holeStroke: {
         type: Number,
         required: true
     },
@@ -50,7 +50,7 @@ const roundSchema = new Schema(
 
 roundSchema.virtual('totalScore').get(function() {
     let strokeValues = this.scores.map(score => {
-        return score.stroke;
+        return score.holeStroke;
     });
     let totalScore = strokeValues.reduce((acc, value) => acc + value, 0);
     return totalScore;

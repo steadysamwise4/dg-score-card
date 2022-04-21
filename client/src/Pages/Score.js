@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus, faMinus, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { useMutation, useQuery } from "@apollo/client";
-import { ADD_SCORE, DELETE_ROUND, ADD_ROUND } from "../utils/mutations";
-import { QUERY_ALL_COURSES, QUERY_ROUND } from "../utils/queries";
+import { ADD_SCORE, DELETE_ROUND } from "../utils/mutations";
+import { QUERY_ROUND } from "../utils/queries";
 import ScoreModal from "../components/ScoreModal";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { organizeHoleData } from "../utils/data/organizeHoleData";
@@ -37,11 +37,7 @@ function ScorePage() {
   const [show, setShow] = useState(false);
   const [started, setStarted] = useState(false);
   const [inputError, setInputError] = useState('');
-  const par = 3;
-  const tag = 'birdy';
 
-  
-  
   const toggleModal = () => {
     setShow(!show);
    
@@ -78,6 +74,7 @@ function ScorePage() {
     console.log(response.statusText)
   }
   }
+
   const addStroke = () => {
     let score = document.getElementById("strokeTotal").value;
     let newScore = ++score;
@@ -93,36 +90,72 @@ function ScorePage() {
     let newScore = --score;
     return setStroke(newScore);
   };
-  const handleAddScore =  async (event) => {
+  const handleSetStroke = (event) => {
     event.preventDefault();
-    if (stroke < 1) {
-      setInputError('Please enter a valid response!');
-      console.log('Please enter a valid response!');
-      return
-    } else {
-      setInputError('');
-    }
-   
-    try {
-      const updatedRound = await addScore({
-        variables: { roundId: roundParam, holeNumber, par, stroke, tag },
-      });
-      const newTotalScore = updatedRound.data.addScore.totalScore;
-      setStroke(3);
-      
-      if (holeNumber === holesArr.length ) {
-        navigate(`/profile`);
+    let tag;
+    let holeStroke = Number(event.target.value);
+    
+      console.log(Number(event.target.value));
+      if (holeStroke < 1) {
+        setInputError('Please enter a valid response!');
+        console.log('Please enter a valid response!');
+        return
       } else {
-        setHoleNumber(holeNumber + 1);
-        setHolePar(holesArr[index].par);
-        setHoleLength(holesArr[index].length);
-        setTotalScore(newTotalScore);
-        setIndex(index + 1);
-       
+        setInputError('');
       }
-    } catch (e) {
-      console.error(e);
-    }
+  
+      switch (Number(event.target.value)) {
+        case holePar:
+          tag = 'par';
+          break;
+        case 1:
+          tag = 'ace';
+          break;
+        case holePar - 1:
+          tag = 'birdy';
+          break;
+        case holePar - 2:
+          tag = 'eagle';
+          break;
+        case holePar + 1:
+          tag = 'bogey';
+          break;
+        case holePar + 2:
+          tag = 'd.bogey';
+          break;
+        case holePar - 3:
+          tag = 'd.eagle';
+          break;
+        default:
+          tag = 'greater';
+      }
+      handleAddScore(holeStroke, tag);
+  };
+    
+  const handleAddScore = async (holeStroke, tag) => {
+    console.log(tag);
+      try {
+        const par = holePar;
+        const updatedRound = await addScore({
+          variables: { roundId: roundParam, holeNumber, par, holeStroke, tag },
+        });
+        const newTotalScore = updatedRound.data.addScore.totalScore;
+        setStroke(3);
+        
+        if (holeNumber === holesArr.length ) {
+          navigate(`/profile`);
+        } else {
+          setHoleNumber(holeNumber + 1);
+          setHolePar(holesArr[index].par);
+          setHoleLength(holesArr[index].length);
+          setTotalScore(newTotalScore);
+          setIndex(index + 1);
+         
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    
   };
   // const FindPar = (cntCourseName, i) => {
   //   const holeNum = i;
@@ -168,6 +201,7 @@ function ScorePage() {
       console.error(err);
     }
   };
+  
  
 
   if (loading) {
@@ -213,22 +247,22 @@ function ScorePage() {
         {inputError && <div className="text-danger">{inputError}</div>}
 
         <div className='d-flex flex-wrap align-items-center' style={{width: '350px'}}>
-          <button onClick={handleAddScore} className="button-quick">
+          <button onClick={handleSetStroke} value={holePar} className="button-quick">
             Par
           </button>
-          <button onClick={handleAddScore} className="button-quick">
+          <button onClick={handleSetStroke} value={holePar - 1}className="button-quick">
             Birdy
           </button>
-          <button onClick={handleAddScore} className="button-quick">
+          <button onClick={handleSetStroke} value={holePar - 2}className="button-quick">
             Eagle
           </button>
-          <button onClick={handleAddScore} className="button-quick">
+          <button onClick={handleSetStroke} value={1}className="button-quick">
             Ace
           </button>
-          <button onClick={handleAddScore} className="button-quick">
+          <button onClick={handleSetStroke} value={holePar + 1}className="button-quick">
             Bogey
           </button>
-          <button onClick={handleAddScore} className="button-quick">
+          <button onClick={handleSetStroke} value={holePar + 2}className="button-quick">
             D.Bogey
           </button>
           <InputGroup className="" style={{ width: "350px" }}>
@@ -248,7 +282,7 @@ function ScorePage() {
               type="number"
               pattern="[0-9]*"
               id="strokeTotal"
-              min={1}
+              min={null}
               step="1"
             />
             <Button
@@ -259,7 +293,7 @@ function ScorePage() {
               ➖
             </Button>
           </InputGroup>
-          <button onClick={handleAddScore} className="button-go">
+          <button onClick={handleSetStroke} className="button-go" value={stroke}>
             Submit
           </button>
         </div>

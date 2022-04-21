@@ -39,7 +39,7 @@ const typeDefs = gql`
     holeNumber: Int
     par: Int
     tag: String
-    stroke: Int
+    holeStroke: Int
   }
   type Query {
     me: User
@@ -66,7 +66,7 @@ const typeDefs = gql`
       holeCount: Int!
     ): Course
     addHole(courseId: ID!, holeNumber: Int!, par: Int!, length: String): Course
-    addScore(roundId: ID!, holeNumber: Int!, stroke: Int!, par: Int!, tag: String!): Round
+    addScore(roundId: ID!, holeNumber: Int!, par: Int!, holeStroke: Int!, tag: String!): Round
   }
   type Auth {
     token: ID!

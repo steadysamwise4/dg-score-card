@@ -171,11 +171,11 @@ const resolvers = {
       throw new AuthenticationError("You need to be logged in!");
     },
 
-    addScore: async (parent, { roundId, holeNumber, par, stroke, tag }, context) => {
+    addScore: async (parent, { roundId, holeNumber, par, holeStroke, tag }, context) => {
       if (context.user) {
         const updatedRound = await Round.findOneAndUpdate(
           { _id: roundId },
-          { $push: { scores: { holeNumber, par, stroke, tag } } },
+          { $push: { scores: { holeNumber, par, holeStroke, tag } } },
           { new: true, runValidators: true }
         );
 

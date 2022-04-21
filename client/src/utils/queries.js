@@ -58,7 +58,7 @@ query round($id: ID!) {
     scores {
       holeNumber
       par
-      stroke
+      holeStroke
       tag
     }
     totalScore
@@ -90,7 +90,7 @@ export const QUERY_USER = gql`
         scores {
           holeNumber
           par
-          stroke
+          holeStroke
           tag
         }
       }
@@ -125,7 +125,7 @@ query me {
       scores {
         holeNumber
         par
-        stroke
+        holeStroke
         tag
       }
       totalScore
