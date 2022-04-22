@@ -196,7 +196,7 @@ function ScorePage() {
         variables: { roundId: roundParam },
       });
 
-      navigate(`/profile`);
+      navigate(`/history`);
     } catch (err) {
       console.error(err);
     }

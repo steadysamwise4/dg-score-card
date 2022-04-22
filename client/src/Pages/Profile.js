@@ -1,173 +1,19 @@
-import React, { useState } from "react";
-import { NavLink, Link } from "react-router-dom";
-import { QUERY_ME, QUERY_ALL_COURSES } from "../utils/queries";
-import { useQuery } from "@apollo/client";
-import HistoryModal from "../components/HistoryModal";
-import CoursesPlayed from "../components/CoursesPlayed";
-import FavCourses from "../components/FavCourses";
-import HistoryTable from "../components/HistoryTable";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowDown, faArrowUp } from "@fortawesome/free-solid-svg-icons";
-import Auth from "../utils/auth";
-import { shortenDate } from "../utils/helpers"
+import React from 'react';
+import Auth from '../utils/auth';
 
-function Profile() {
-  const [show, setShow] = useState(false);
-  const [showRecent, setShowRecent] = useState(false);
-  const { loading, data } = useQuery(QUERY_ME, {});
-  const { data: allCorseData } = useQuery(QUERY_ALL_COURSES);
-  const user = data?.me || {};
-  const allCourses = allCorseData?.courses || [];
-  console.log(user);
-
-  const findScore = (strokes, par) => {
-    let score = strokes - par;
-    if (score > 0) {
-      return `+${score}`;
-    } else if (score < 0) {
-      return `${score}`;
-    }
-    return score;
-  };
-
-  const toggleModal = () => {
-    setShow(!show);
-  };
-
-  const toggleList = () => {
-    setShowRecent(!showRecent);
-  };
-
-  const FindParTotal = (cntCourseName) => {
-    for (let i = 0; i < allCourses.length; i++) {
-      const course = allCourses[i];
-      if (cntCourseName === course.courseName) {
-        const holesArr = course.holes;
-        let total = 0;
-        for (let j = 0; j < holesArr.length; j++) {
-          total += holesArr[j].par;
-        }
-        return total;
-      }
-    }
-  };
-
-  if (loading) {
+const Profile = () => {
     return (
-      <div className='d-flex justify-content-center'>
-        <h1 className='alt-heading animate__animated  animate__bounce'>
-          Loading...
-        </h1>
-      </div>
-    );
-  }
-  if (Auth.loggedIn() === false) {
-    return (
-      <div className='d-flex flex-column align-items-center'>
-        <h4 className='loginMsg fw-bold'>
-          You need to be logged in to see this page. Use the navigation links
-          above to sign up or log in!
-        </h4>
-        <Link to={"/login"} className='my-2'>
-          <button className='button-go'>Login</button>
-        </Link>
-      </div>
-    );
-  }
-
-  return (
-    <section className='d-flex justify-content-center'>
-      <HistoryModal
-        show={show}
-        handleClose={toggleModal}
-        user={user}
-        allCourses={allCourses}
-        FindParTotal={FindParTotal}
-        findScore={findScore}
-      />
-      <div className='flex-column'>
-        <div className='card-heading d-flex flex-column align-items-center'>
-          <h1 className='alt-heading'>🥏 Welcome to your dashboard!</h1>
-          <h2>username: {user.username}</h2>
-          <h2>account created {shortenDate(user.createdAt)}</h2>
-         
-          {user.courses.length === 0 && user.coursesPlayed.length === 0 ? (
-            <div className='text-center animate__animated animate__shakeY animate__delay-3s animate__slower 3s'>
-              <h2>
-                <FontAwesomeIcon icon={faArrowUp} /> start playing now{" "}
-                <FontAwesomeIcon icon={faArrowUp} />
-              </h2>
-            </div>
-          ) : (
-            <div className='alt-sub-heading'>
-              <h2 className='text-center animate__animated animate__shakeY animate__delay-3s animate__slower 3s'>
-                <FontAwesomeIcon icon={faArrowDown} /> replay a course{' '}
-                <FontAwesomeIcon icon={faArrowDown} />
-              </h2>
-
-              <div className='list-go'>
-                {showRecent === true || user.courses.length === 0 ? (
-                  <CoursesPlayed
-                    courses={user.coursesPlayed}
-                    allCourses={allCourses}
-                    style={{ textDecoration: "none" }}
-                  />
-                ) : (
-                  <FavCourses
-                    courses={user.courses}
-                    style={{ textDecoration: "none" }}
-                  />
-                )}
-                {user.courses.length === 0 ||
-                user.coursesPlayed.length === 0 ? (
-                  <div></div>
-                ) : (
-                  <div className='toggle d-flex flex-column align-items-center form-check form-switch'>
-                    <input
-                      className='form-check-input custom-control-input'
-                      type='checkbox'
-                      role='switch'
-                      id='toggleSwitch'
-                      onClick={() => toggleList()}
-                    />
-                    <label
-                      className='form-check-label custom-control-label'
-                      htmlFor='toggleSwitch'
-                    >
-                      {showRecent === true ? (
-                        <h5>Show favorite courses</h5>
-                      ) : (
-                        <h5>Show recently played courses</h5>
-                      )}
-                    </label>
-                  </div>
-                )}
-              </div>
-            </div>
-          )}
-
-          <div>
-            {user.rounds.length === 0 ? (
-              <div></div>
-            ) : (
-              <div className='card-heading'>
-                {/* <HistoryTable
-                  user={user}
-                  FindParTotal={FindParTotal}
-                  findScore={findScore}
-                /> */}
-                <button
-                  className='button-go'
-                  onClick={() => toggleModal()}
-                >
-                  Score history
-                </button>
-              </div>
-            )}
-          </div>
+        <>
+        <h1 className='text-center p-2 mb-4' style={{width: '350px', margin: '0 auto'}}>Account</h1>
+        <div className='d-flex flex-column align-items-center' style={{width: '350px', margin: '0 auto'}}>
+            <h5 className='border border-dark p-1' style={{width: '350px'}}>username</h5>
+            <h5 className='border border-dark p-1' style={{width: '350px'}}>email address</h5>
+            <h5 className='border border-dark p-1' style={{width: '350px'}}>edit password link</h5>
+            <h5 className='border border-dark p-1' style={{width: '350px'}}>link to friends</h5>
+            <h5 className='border border-dark p-1' style={{width: '350px'}}>link to history/stats</h5>
         </div>
-      </div>
-    </section>
-  );
+        </>
+    )
 }
+
 export default Profile;

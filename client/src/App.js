@@ -10,6 +10,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import Home from "./Pages/Home";
 import "./App.css";
+import History from "./Pages/History";
 import Profile from "./Pages/Profile";
 import NewRound from "./Pages/NewRound";
 import ScorePage from "./Pages/Score";
@@ -66,6 +67,7 @@ function App() {
             <Routes>
               <Route exact path="/" element={<Home />} />
               <Route exact path="/profile" element={<Profile />} />
+              <Route exact path="/history" element={<History />} />
               <Route exact path="/login" element={<Login />} />
               <Route exact path="/signup" element={<Signup />} />
               <Route exact path="/newround/:courseId" element={<NewRound />} />

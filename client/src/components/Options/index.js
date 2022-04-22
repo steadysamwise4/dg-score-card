@@ -16,10 +16,10 @@ function Options() {
             <Nav.Link as={ Link } to="/" key='home' >
               Home
             </Nav.Link>
-            <Nav.Link as={ Link } to="/profile" key='history'>
+            <Nav.Link as={ Link } to="/history" key='history'>
               History
               </Nav.Link>
-              <Nav.Link as={ Link } to="/" key='profile'>
+              <Nav.Link as={ Link } to="/profile" key='profile'>
                   Profile
               </Nav.Link>
               {Auth.loggedIn() && (
